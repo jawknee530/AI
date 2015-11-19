@@ -9,7 +9,7 @@
 using namespace std;
 
 bool train( string, vector<string> &, map< string, vector<string> > & );
-string getMostLikelyGenre( vector<string>, map< string, vector<string> > & );
+string getMostLikelyGenre( vector<string>, map< string, vector<string> > );
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 	vector<string> allgenres;
 	
 	train(argv[1], allgenres, super_map);
+	getMostLikelyGenre( allgenres, super_map);
 	
 }
 
@@ -37,7 +38,7 @@ bool train( string filename, vector <string> &genres, map< string, vector<string
 		fin >> key;
 		
 		//Check if the genre already exists
-		for(int i = 0; i < genres.size(); i++)
+		for(unsigned int i = 0; i < genres.size(); i++)
 		{
 			if(genres[i] == key)
 			{
@@ -73,4 +74,25 @@ bool train( string filename, vector <string> &genres, map< string, vector<string
 	word.clear();
 
 	return 1;
+}
+
+string getMostLikelyGenre( vector<string> genres, map< string, vector<string> > inmap)
+{
+
+	/*Incomplete - currently only counts the number of words in a genre*/
+
+	vector<int> instances;		//Count of instances will be in the same order as their corresponding genre.
+
+	for(unsigned int i = 0; i < genres.size(); i++)
+	{
+		instances.push_back(0);
+		for(unsigned int q = 0; q < inmap[genres[i]].size(); q++)
+		{
+			instances[i] += 1;
+		}
+
+		cout << instances[i] << endl;
+	}
+
+	return "boop"; //stub, return genre
 }
