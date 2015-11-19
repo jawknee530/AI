@@ -47,6 +47,7 @@ bool train( string filename, vector <string> &genres, map< string, vector<string
 		if(pass == true)
 		{
 			genres.push_back(key);
+			cout << key << endl;
 		}
 
 		fin.get(ch);
@@ -63,8 +64,10 @@ bool train( string filename, vector <string> &genres, map< string, vector<string
 			{
 				fin.get(ch);		//clear space
 			}
+			cout << word << endl;
 			inmap[key].push_back(word);
 		}
+		cout << endl << "END" << endl;
 		pass = true;
 	}
 	fin.close();
