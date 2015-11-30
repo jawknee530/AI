@@ -20,7 +20,7 @@ bool isStrEqual(string, string);
 
 bool train( string, int &, vector <string> &, map< string, int > &, vector<string> &, map< string, vector<string> > & );
 
-double probabilityWordInGenre ( map< string, vector<string> >, string, string, int);
+double probabilityWordInGenre ( map< string, vector<string> >, string, string, int, int&);
 
 double probabilityOfGenre(map< string, vector<string> >, vector<string>, map< string, int >); 
 
@@ -208,7 +208,7 @@ bool isStrEqual(string A, string B)
 
 	Uses Laplace Smoothing (LAPLACE is #defined)
 */
-double probabilityWordInGenre ( map< string, vector<string> > inMap, string inGenre, string inWord, int laplace_n)
+double probabilityWordInGenre ( map< string, vector<string> > inMap, string inGenre, string inWord, int laplace_n, int &matchesNotZero)
 {
 	int numInstancesOfWord = 0;
 	double resultWithLaplace = 0;
@@ -221,6 +221,7 @@ double probabilityWordInGenre ( map< string, vector<string> > inMap, string inGe
 		}
 	}
 
+	matchesNotZero += numInstancesOfWord;
 
 	resultWithLaplace = ((double)numInstancesOfWord + (double)LAPLACE) / ((double)inMap[inGenre].size() + ((double)LAPLACE * (double)laplace_n));
 
@@ -277,6 +278,7 @@ void getMostLikelyGenre( vector<string>inStr, vector<string> inGenres, map< stri
 	double prb_m = 0;			//p(message)
 	double max = -1;
 	string mostLikelyGenre = "NONE";
+	int matchesNotZero = 0;
 
 
 	//For each Genre...
@@ -295,13 +297,21 @@ void getMostLikelyGenre( vector<string>inStr, vector<string> inGenres, map< stri
 		{
 			if(q == 0)
 			{
-				word_prb[i] = (probabilityWordInGenre(inMap, inGenres[i], inStr[q], inDistWords.size()));
+				word_prb[i] = (probabilityWordInGenre(inMap, inGenres[i], inStr[q], inDistWords.size(), matchesNotZero));
 			}
 			else
 			{
-				word_prb[i] *= (probabilityWordInGenre(inMap, inGenres[i], inStr[q], inDistWords.size()));
+				word_prb[i] *= (probabilityWordInGenre(inMap, inGenres[i], inStr[q], inDistWords.size(), matchesNotZero));
 			}
 		}
+	}
+
+	if(matchesNotZero == 0)
+	{
+		cout << "------------------" << endl;
+		cout << "No Words Matched the Training Input AT ALL!" << endl;
+		cout << "------------------" << endl;
+		return;
 	}
 
 	// Generate prb_m  [ p(message) ]
