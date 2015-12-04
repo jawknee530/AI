@@ -279,6 +279,7 @@ void getMostLikelyGenre( vector<string>inStr, vector<string> inGenres, map< stri
 	double max = -1;
 	string mostLikelyGenre = "NONE";
 	int matchesNotZero = 0;
+	double total = 0;
 
 
 	//For each Genre...
@@ -306,6 +307,7 @@ void getMostLikelyGenre( vector<string>inStr, vector<string> inGenres, map< stri
 		}
 	}
 
+	//Check if no matches were found
 	if(matchesNotZero == 0)
 	{
 		cout << "------------------" << endl;
@@ -326,15 +328,23 @@ void getMostLikelyGenre( vector<string>inStr, vector<string> inGenres, map< stri
 		total_prb[i] = ((word_prb[i] * genre_prb[i]) / prb_m);
 	}
 
+	cout << "All Probabilities: " << endl;
+	cout << "-------------" << endl;
+
 	// Find the greatest probability
 	for(unsigned int i = 0; i < inGenres.size(); i++)
 	{
+		cout << inGenres[i] << ":  \t" << total_prb[i] << endl;
+		total += total_prb[i];
 		if(total_prb[i] > max)
 		{
 			max = total_prb[i];
 			mostLikelyGenre = inGenres[i];
 		}
 	}
+	cout << "-------------" << endl;
+	cout << "Sum of All Probabilities: " << endl << total << endl;
+	cout << "-------------" << endl;
 
 	//Output results
 	cout << endl;
